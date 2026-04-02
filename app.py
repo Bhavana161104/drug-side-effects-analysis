@@ -5,6 +5,20 @@ import numpy as np
 # Load model
 model = pickle.load(open("models/drug_model.pkl", "rb"))
 
+
+
+
+import os
+import pickle
+
+model_path = os.path.join("models", "drug_model.pkl")
+
+model = pickle.load(open(model_path, "rb"))
+
+
+
+
+
 # Page config
 st.set_page_config(page_title="Drug Side Effects Dashboard", layout="centered")
 
