@@ -1,23 +1,16 @@
 import streamlit as st
 import pickle
 import numpy as np
-
-# Load model
-model = pickle.load(open("models/drug_model.pkl", "rb"))
-
-
-
-
 import os
-import pickle
+import pandas as pd
 
+# Load model safely
 model_path = os.path.join("models", "drug_model.pkl")
 
-model = pickle.load(open(model_path, "rb"))
-
-
-
-
+if not os.path.exists(model_path):
+    st.error("❌ Model file not found. Please check GitHub repository.")
+else:
+    model = pickle.load(open(model_path, "rb"))
 
 # Page config
 st.set_page_config(page_title="Drug Side Effects Dashboard", layout="centered")
@@ -32,7 +25,7 @@ st.sidebar.header("Input Features")
 useful_count = st.sidebar.slider("Useful Count", 0, 1000, 10)
 condition = st.sidebar.number_input("Condition Encoded", min_value=0, value=1)
 
-# Main section
+# Prediction
 st.subheader("🔍 Prediction")
 
 if st.button("Predict Sentiment"):
@@ -45,7 +38,7 @@ if st.button("Predict Sentiment"):
     else:
         st.error("❌ Negative Sentiment (Possible Side Effects)")
 
-# Info section
+# About
 st.markdown("---")
 st.subheader("📊 About Project")
 
@@ -57,8 +50,7 @@ st.write("""
   - Negative → Risky
 """)
 
-import pandas as pd
-
+# Visualization
 data = pd.DataFrame({
     "Feature": ["Useful Count", "Condition"],
     "Value": [useful_count, condition]
@@ -66,10 +58,6 @@ data = pd.DataFrame({
 
 st.subheader("📈 Input Visualization")
 st.bar_chart(data.set_index("Feature"))
-
-
-
-
 
 # Footer
 st.markdown("---")
